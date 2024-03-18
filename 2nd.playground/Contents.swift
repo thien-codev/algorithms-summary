@@ -30,12 +30,12 @@ class Solution {
     // First solution
     func lengthOfLongestSubstring(_ s: String) -> Int {
         var result = 0
-        var differChars: [Character] = []
+        var differChars: ArraySlice<Character> = []
         
         for i in s {
             if let index = differChars.firstIndex(of: i) {
                 differChars.append(i)
-                differChars = Array(differChars.suffix(from: index + 1))
+                differChars = differChars.suffix(from: index + 1)
             } else {
                 differChars.append(i)
                 if differChars.count > result {
@@ -49,6 +49,28 @@ class Solution {
         return result
     }
     
+    // Second solution
+    func lengthOfLongestSubstring2nd(_ s: String) -> Int {
+        var result = 0
+        var startIndex = -1
+        var differChars: Dictionary<Character, Int> = .init()
+        
+        for (i, value) in s.enumerated() {
+            if let lastSeen = differChars[value] {
+                if startIndex < lastSeen {
+                    startIndex = lastSeen
+                }
+            }
+            differChars[value] = i
+            
+            if i - startIndex > result {
+                result = i - startIndex
+            }
+        }
+        
+        return result
+    }
+    
 }
 
-Solution().lengthOfLongestSubstring("aabbc")
+Solution().lengthOfLongestSubstring2nd("dvdf")
